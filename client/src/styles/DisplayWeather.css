@@ -1,0 +1,19 @@
+img {
+  width: 125px;
+  height: 125px;
+}
+
+.weatherInfo {
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.weather {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.location {
+  padding-top: 30px;
+}
