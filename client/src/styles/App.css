@@ -8,11 +8,12 @@
   padding-bottom: 25px;
   font-size: 45px;
   font-family: Marker Felt;
-  color: white;
 }
 
 body {
   background-image: url('https://image.freepik.com/free-vector/mandala-arabesque-decorative_25989-48.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  width: 100%;
 }
+
