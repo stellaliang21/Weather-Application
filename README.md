@@ -7,9 +7,8 @@
 ## Installing and Running
 1. Clone the repository `git clone https://github.com/stellaliang21/StellaLiang.git`
 2. Install dependencies `npm install`
-2. Run server - `npm run server`
-3. Run client - `npm run react-dev`
-4. Go to: http://localhost:3000
+2. Run server & client - `npm run dev`
+3. Go to: http://localhost:3000
 
 ## Technologies Used 
 1. React.js
