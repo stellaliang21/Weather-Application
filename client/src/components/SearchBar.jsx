@@ -9,7 +9,8 @@ class SearchBar extends React.Component {
     this.state = {
       value: '',
       weather: [],
-      location: ''
+      location: '',
+      invalidLocation: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.getTime = this.getTime.bind(this);
@@ -24,23 +25,24 @@ class SearchBar extends React.Component {
 
   getTime(location) {
     axios.get(`/location/${location}`)
-    .then((results) => {
+    .then(results => {
       const weather = results.data.consolidated_weather;
       const location = results.data.title;
-      this.setState({weather, location});
+      this.setState({weather, location, invalidLocation: ''});
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
+      this.setState({invalidLocation: 'Please type in a valid location!'});
     });
   }
   
   handleSubmit(e, location) {
-    this.getTime(location);
     e.preventDefault();
+    this.getTime(location);
   }
 
   render() {
-    const { value, weather, location } = this.state;
+    const { value, weather, location, invalidLocation } = this.state;
     return(
       <div>
         <form className='test' onSubmit={e => this.handleSubmit(e, value)}>
@@ -58,7 +60,11 @@ class SearchBar extends React.Component {
             />
           </div>
         </form>
-        <DisplayWeather weather={weather} location={location} />
+        <div>{invalidLocation}</div>
+        <DisplayWeather 
+          weather={weather} 
+          location={location} 
+        />
       </div>
     );
   }
