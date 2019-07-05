@@ -12,8 +12,20 @@ img {
 .weather {
   padding-left: 10px;
   padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .location {
   padding-top: 30px;
+  font-size: 25px;
+}
+
+@media only screen and (max-width: 480px) {
+  .weatherInfo {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
 }
