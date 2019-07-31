@@ -7,10 +7,13 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
       weather: [],
       location: '',
-      invalidLocation: ''
+      invalidLocation: false,
+      loading: false,
+      searchedLocation: '',
+      numberOfDays: '',
+      filter: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.getTime = this.getTime.bind(this);
@@ -18,8 +21,10 @@ class SearchBar extends React.Component {
   }
 
   handleChange(e) {
+    const name = e.target.name;
+    const value = e.target.value;
     this.setState({
-      value: e.target.value
+      [name]: value
     });
   }
 
@@ -28,31 +33,58 @@ class SearchBar extends React.Component {
     .then(results => {
       const weather = results.data.consolidated_weather;
       const location = results.data.title;
-      this.setState({weather, location, invalidLocation: ''});
+      const filteredInfo = weather.filter((info, index) => {
+        return index < Number(this.state.numberOfDays)
+      }); 
+
+      this.setState({weather, location, invalidLocation: '', loading: false, filter: filteredInfo});
     })
     .catch(err => {
       console.log(err);
-      this.setState({invalidLocation: 'Please type in a valid location!'});
+      this.setState({invalidLocation: true, loading: false});
     });
   }
   
   handleSubmit(e, location) {
     e.preventDefault();
     this.getTime(location);
+    this.setState({
+      loading: true
+    });
   }
 
   render() {
-    const { value, weather, location, invalidLocation } = this.state;
+    const { searchedLocation, weather, location, invalidLocation, loading, filter } = this.state;
+
+    let data;
+    if (loading === true) {
+      data = <img src='https://ui-ex.com/images/transparent-blue-loading-image-gif.gif'></img>
+    } else if (invalidLocation === true) {
+      data = <div>Please submit a valid location</div>
+    } else {
+      data = 
+      <DisplayWeather 
+        weather={filter} 
+        location={location} 
+      />
+    }
+
     return(
       <div>
-        <form className='test' onSubmit={e => this.handleSubmit(e, value)}>
+        <form className='test' onSubmit={e => this.handleSubmit(e, searchedLocation)}>
           <input 
+            name='searchedLocation'
             className='input' 
             type='text' 
-            value={value} 
+            value={searchedLocation} 
             onChange={this.handleChange} 
             placeholder={'Location'} 
           />
+          <select name='numberOfDays' onChange={this.handleChange}>
+            <option value='1'>1 day</option>
+            <option value='3'>3 days</option>
+            <option value='5'>5 days</option>
+          </select>
           <div>
             <input 
               type='submit' 
@@ -60,14 +92,10 @@ class SearchBar extends React.Component {
             />
           </div>
         </form>
-        <div>{invalidLocation}</div>
-        <DisplayWeather 
-          weather={weather} 
-          location={location} 
-        />
+        {data}
       </div>
     );
   }
 }
 
-export default SearchBar; 
+export default SearchBar;
